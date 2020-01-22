@@ -66,4 +66,8 @@ public class AccountControllerTest {
         assertEquals(800, cap.getMoney().intValue());
     }
 
+    @Test
+    public void createAccountForProfile() {
+
+    }
 }

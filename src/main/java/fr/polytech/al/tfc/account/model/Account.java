@@ -21,6 +21,8 @@ public class Account {
 
     private Integer lastWindow = 0;
 
+    private ProfileDTO owner;
+
     @NonNull
     private AccountType accountType;
 

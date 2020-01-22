@@ -13,8 +13,6 @@ public class TfcAccountApplication implements CommandLineRunner {
     @Autowired
     private AccountRepository accountRepository;
 
-
-
     public static void main(String[] args) {
         SpringApplication.run(TfcAccountApplication.class, args);
     }
