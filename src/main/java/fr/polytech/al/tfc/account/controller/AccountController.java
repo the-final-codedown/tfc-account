@@ -3,6 +3,7 @@ package fr.polytech.al.tfc.account.controller;
 import fr.polytech.al.tfc.account.model.*;
 import fr.polytech.al.tfc.account.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/accounts")
 public class AccountController {
+
+    @Value("${profile.host}")
+    private String profileHost;
 
     private final AccountRepository accountRepository;
 
@@ -50,11 +54,12 @@ public class AccountController {
     @PostMapping("/{email}/accounts")
     public ResponseEntity<Account> createAccountForProfile(@PathVariable(value = "email") String email, @RequestBody AccountDTO accountDTO) throws URISyntaxException {
         //todo use global variable
-        String host = "http://localhost:8083/profiles/"+email;
+        String host = "http://"+profileHost+"/profiles/"+email;
         RestTemplate restTemplate = new RestTemplate();
         URI uri = new URI(host);
         ResponseEntity<ProfileDTO> result = restTemplate.getForEntity(uri, ProfileDTO.class);
         ProfileDTO ower = result.getBody();
+        System.out.println(ower);
 
         if (ower != null) {
             Account account = new Account(accountDTO);
