@@ -1,6 +1,6 @@
 FROM openjdk:8-jre-alpine
 
-EXPOSE 8082
+EXPOSE 8081
 
 RUN mkdir /app
 WORKDIR /app
