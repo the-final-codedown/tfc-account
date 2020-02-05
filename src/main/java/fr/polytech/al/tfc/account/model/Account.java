@@ -1,6 +1,7 @@
 package fr.polytech.al.tfc.account.model;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -8,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Accessors(chain = true)
 public class Account {
 
     @Setter(AccessLevel.NONE)
