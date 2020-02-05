@@ -13,7 +13,8 @@ public class BankAccount extends Account {
     }
 
     @Override
-    public void setMoney(Integer integer) {
+    public BankAccount setMoney(Integer integer) {
         // do nothing as the bank is immutable
+        return this;
     }
 }

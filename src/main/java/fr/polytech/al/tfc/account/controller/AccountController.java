@@ -1,16 +1,16 @@
 package fr.polytech.al.tfc.account.controller;
 
-import fr.polytech.al.tfc.account.model.*;
+import fr.polytech.al.tfc.account.business.AccountBusiness;
+import fr.polytech.al.tfc.account.model.Account;
+import fr.polytech.al.tfc.account.model.AccountDTO;
+import fr.polytech.al.tfc.account.model.AccountType;
+import fr.polytech.al.tfc.account.model.Cap;
 import fr.polytech.al.tfc.account.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,15 +18,15 @@ import java.util.Optional;
 @RequestMapping("/accounts")
 public class AccountController {
 
-    @Value("${profile.host}")
-    private String profileHost;
-
     private final AccountRepository accountRepository;
+    private final AccountBusiness accountBusiness;
 
     @Autowired
-    public AccountController(AccountRepository accountRepository) {
+    public AccountController(AccountRepository accountRepository, AccountBusiness accountBusiness) {
         this.accountRepository = accountRepository;
+        this.accountBusiness = accountBusiness;
     }
+
 
     @GetMapping("/{accountType}/accounts")
     public ResponseEntity<List<Account>> viewAccounts(@PathVariable(value = "accountType") AccountType accountType) {
@@ -52,21 +52,12 @@ public class AccountController {
     }
 
     @PostMapping("/{email}/accounts")
-    public ResponseEntity<Account> createAccountForProfile(@PathVariable(value = "email") String email, @RequestBody AccountDTO accountDTO) throws URISyntaxException {
-        //todo use global variable
-        String host = "http://"+profileHost+"/profiles/"+email;
-        RestTemplate restTemplate = new RestTemplate();
-        URI uri = new URI(host);
-        ResponseEntity<ProfileDTO> result = restTemplate.getForEntity(uri, ProfileDTO.class);
-        ProfileDTO ower = result.getBody();
-        System.out.println(ower);
-
-        if (ower != null) {
-            Account account = new Account(accountDTO);
-            account.setOwner(ower);
-            accountRepository.save(account);
+    public ResponseEntity<Account> createAccountForProfile(@PathVariable(value = "email") String email, @RequestBody AccountDTO accountDTO) {
+        Account account = accountBusiness.createAccountForProfile(email, accountDTO);
+        if (account != null) {
             return new ResponseEntity<>(account, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
