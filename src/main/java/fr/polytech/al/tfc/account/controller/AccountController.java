@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +53,7 @@ public class AccountController {
     }
 
     @PostMapping("/{email}/accounts")
-    public ResponseEntity<Account> createAccountForProfile(@PathVariable(value = "email") String email, @RequestBody AccountDTO accountDTO) {
+    public ResponseEntity<Account> createAccountForProfile(@PathVariable(value = "email") String email, @RequestBody AccountDTO accountDTO) throws AccountNotFoundException {
         Account account = accountBusiness.createAccountForProfile(email, accountDTO);
         if (account != null) {
             return new ResponseEntity<>(account, HttpStatus.OK);
