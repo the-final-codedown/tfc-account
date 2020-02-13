@@ -44,4 +44,9 @@ public class TransactionController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+
+    @PutMapping
+    public ResponseEntity<Transaction> updateTransaction(@RequestBody Transaction transaction) {
+        return new ResponseEntity<>(transactionRepository.save(transaction), HttpStatus.OK);
+    }
 }
