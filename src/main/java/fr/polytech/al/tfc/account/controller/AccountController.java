@@ -43,6 +43,11 @@ public class AccountController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @PutMapping
+    public ResponseEntity<Account> updateAccount(@RequestBody Account account) {
+        return new ResponseEntity<>(accountRepository.save(account), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}/cap")
     public ResponseEntity<Cap> getCap(@PathVariable(value = "id") String id) {
         System.out.println("Fetching account with id " + id);
